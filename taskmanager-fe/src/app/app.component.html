@@ -1,0 +1,46 @@
+<style>
+  .topnav-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
+  }
+  .sidenav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.8rem;
+    height: 100vh;
+  }
+  .content {
+    height: 100vh;
+  }
+  .divider {
+    flex: 1 1 auto;
+  }
+</style>
+
+<main>
+  <mat-toolbar class="topnav-container">
+    <a mat-button color="primary" [routerLink]="['/']">
+      Task Manager
+    </a>
+    <span class="divider"></span>
+    <button mat-flat-button color="primary" (click)="openDialog()">
+      Add Task
+    </button>
+  </mat-toolbar>
+  <mat-sidenav-container class="">
+    <mat-sidenav mode="side" opened>
+      <mat-nav-list>
+        @for (link of links; track link) {
+          <a mat-list-item [routerLink]="[link.href]" [activated]="link.isActive">{{ link.name }}</a>
+        }
+      </mat-nav-list> 
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <section class="content">
+        <router-outlet></router-outlet>
+      </section>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</main>

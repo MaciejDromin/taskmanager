@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/taskmanager?useUnicode=yes&characterEncoding=UTF-8
+    username: taskmanager
+    password: taskmanager
+
+scoring:
+  limit: 4

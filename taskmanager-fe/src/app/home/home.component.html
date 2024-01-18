@@ -1,0 +1,84 @@
+<style>
+    .day-plan-container {
+        padding: 1rem;
+    }
+    .header-min-height {
+        min-height: 60px;
+    }
+    .desc {
+        min-height: 50px;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.8rem;
+    }
+    .cl-red {
+        background-color: #D91E36;
+    }
+    .cl-yellow {
+        background-color: #E6AF2E;
+    }
+    .cl-orange {
+        background-color: #FA7921;
+    }
+    .cl-grey {
+        background-color: #888098;
+    }
+    .cl-green {
+        background-color: #BAF2BB;
+    }
+    .cl-blue {
+        background-color: #2B59C3;
+    }
+    .accordion-container {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .subtask-flex {
+        display: flex;
+        margin-right: 8px;
+    }
+    .subtask-header {
+        flex-grow: 1;
+        flex-basis: 0;
+        margin-right: 16px;
+        align-items: center;
+        display: flex;
+    }
+    .subtask-desc {
+        flex-grow: 2;
+        align-items: center;
+        margin-right: 16px;
+    }
+</style>
+
+<div class="day-plan-container">
+    <div class="accordion-container">
+        <mat-accordion>
+            <mat-expansion-panel hideToggle *ngFor="let task of (dailyPlan$ | async).tasks" [id]="[task.id]">
+              <mat-expansion-panel-header class="header-min-height">
+                <mat-panel-title>
+                    {{task.name}}
+                </mat-panel-title>
+                <mat-panel-description class="desc">
+                    <button mat-mini-fab [ngClass]="[determinePriorityColor(task.priority)]">
+                        <mat-icon>{{determinePriorityIcon(task.priority)}}</mat-icon>
+                    </button>
+                    <mat-chip [ngClass]="[determineStatusColor(task.status)]">{{task.status}}</mat-chip>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div *ngFor="let subTask of task.subTasks" [id]="[subTask.id]">
+                <div class="subtask-flex">
+                    <div class="subtask-header">{{subTask.name}}</div>
+                    <div class="subtask-desc desc">
+                        <button mat-mini-fab [ngClass]="[determinePriorityColor(subTask.priority)]">
+                            <mat-icon>{{determinePriorityIcon(subTask.priority)}}</mat-icon>
+                        </button>
+                        <mat-chip [ngClass]="[determineStatusColor(subTask.status)]">{{subTask.status}}</mat-chip>
+                    </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
