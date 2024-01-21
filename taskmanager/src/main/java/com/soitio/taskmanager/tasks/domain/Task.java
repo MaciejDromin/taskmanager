@@ -1,11 +1,7 @@
 package com.soitio.taskmanager.tasks.domain;
 
 import com.soitio.taskmanager.goals.domain.Goal;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +41,7 @@ public class Task {
     private Status status;
 
     @Builder.Default
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubTask> subTasks = new ArrayList<>();
 
     @ManyToOne

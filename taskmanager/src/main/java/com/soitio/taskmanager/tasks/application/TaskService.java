@@ -8,6 +8,7 @@ import com.soitio.taskmanager.tasks.domain.Task;
 import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUIDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
+import com.soitio.taskmanager.tasks.domain.dto.TaskUpdateDto;
 import com.soitio.taskmanager.tasks.domain.proj.TaskForScoringProj;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +65,18 @@ public class TaskService {
         var task = taskRepository.getReferenceById(id);
         task.setStatus(newStatus);
         taskRepository.save(task);
+    }
+
+    public void deleteTask(String taskId) {
+        taskRepository.deleteById(taskId);
+    }
+
+    @Transactional
+    public TaskDto updateTask(TaskUpdateDto task) {
+        var taskToUpdate = taskRepository.getReferenceById(task.getId());
+        return taskFactory.from(
+                taskRepository.save(
+                        taskFactory.updateTask(taskToUpdate, task, task.getGoalId() == null
+                                ? null : goalService.getGoalById(task.getGoalId()))));
     }
 }

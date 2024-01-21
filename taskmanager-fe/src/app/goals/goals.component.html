@@ -10,7 +10,6 @@
     .goals-grid {
         height: 100%;
         width: 100%;
-        padding: 1rem;
     }
     .goal-tile {
         padding: 16px;
@@ -28,7 +27,7 @@
         </button>
     </mat-toolbar>
     <div class="goals-grid">
-        <mat-grid-list cols="6">
+        <mat-grid-list cols="5">
             <mat-grid-tile class="goal-tile" *ngFor="let goal of (goals$ | async)" [id]="[goal.id]">
                 <mat-card class="goal-card">
                     <mat-card-header>
@@ -41,12 +40,12 @@
                         </div>
                         <div>
                             <h3>Progress</h3>
-                            <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+                            <mat-progress-bar mode="determinate" [value]="goal.progress"></mat-progress-bar>
                         </div>
                     </mat-card-content>
                     <mat-card-actions>
-                      <button mat-button>EDIT</button>
-                      <button mat-button>DELETE</button>
+                      <button mat-button (click)="editGoal(goal)">EDIT</button>
+                      <button mat-button (click)="deleteGoal(goal.id)">DELETE</button>
                     </mat-card-actions>
                 </mat-card>
             </mat-grid-tile>

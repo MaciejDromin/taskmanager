@@ -1,5 +1,6 @@
 package com.soitio.taskmanager.tasks.web;
 
+import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import com.soitio.taskmanager.tasks.application.TaskService;
 import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskDto;

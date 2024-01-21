@@ -6,13 +6,6 @@ import { Message } from '@stomp/stompjs'
 import { MatDialog } from '@angular/material/dialog';
 import { GoalAddComponent } from '../goal-add/goal-add.component';
 
-interface Goal {
-  id: string,
-  name: string,
-  creationDate: string,
-  finishDate: string
-}
-
 @Component({
   selector: 'app-goals',
   standalone: true,
@@ -31,7 +24,9 @@ export class GoalsComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(GoalAddComponent);
+    const dialogRef = this.dialog.open(GoalAddComponent, {
+      data: null
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === undefined) {
@@ -41,6 +36,55 @@ export class GoalsComponent implements OnInit {
         name: result.name,
         finishDate: result.finishDate.set({ hour: 12 }).toUTC().toISO()
       }) })
+    });
+  }
+
+  deleteGoal(goalId: string): void {
+    this.rxStompService.publish({ destination: '/app/goals/delete', body: goalId})
+
+    const deleteGoalFromState = (oldState: {goals: any}) => {
+      return {
+        goals: oldState.goals.filter((goal: any) => {
+          return goal.id !== goalId
+        })
+      }
+    }
+
+    this.state.set(deleteGoalFromState)
+  }
+
+  editGoal(goal: any): void {
+    const dialogRef = this.dialog.open(GoalAddComponent, {
+      data: goal
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === undefined) {
+        return
+      }
+      this.rxStompService.publish({ destination: '/app/goals/update', body: JSON.stringify({
+        id: result.id,
+        name: result.name,
+        finishDate: typeof result.finishDate === 'object' ? result.finishDate.set({ hour: 12 }).toUTC().toISO() : result.finishDate,
+        creationDate: result.creationDate
+      }) })
+
+      const updateGoalInState = (oldState: {goals: any}) => {
+        return {
+          goals: oldState.goals.map((goal: any) => {
+            if (goal.id !== result.id) return goal
+            return {
+              id: result.id,
+              name: result.name,
+              finishDate: typeof result.finishDate === 'object' ? result.finishDate.set({ hour: 12 }).toUTC().toISO() : result.finishDate,
+              creationDate: result.creationDate
+            }
+          })
+        }
+      }
+  
+      this.state.set(updateGoalInState)
+
     });
   }
 

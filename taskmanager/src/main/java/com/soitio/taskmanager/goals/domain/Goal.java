@@ -1,6 +1,7 @@
 package com.soitio.taskmanager.goals.domain;
 
 import com.soitio.taskmanager.tasks.domain.Task;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -36,7 +37,7 @@ public class Goal {
     private LocalDateTime finishDate;
 
     @Builder.Default
-    @OneToMany(mappedBy = "goal")
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
     @Override

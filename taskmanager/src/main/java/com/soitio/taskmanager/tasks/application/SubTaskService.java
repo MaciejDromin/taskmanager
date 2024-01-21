@@ -6,6 +6,7 @@ import com.soitio.taskmanager.tasks.domain.Status;
 import com.soitio.taskmanager.tasks.domain.dto.SubTaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.SubTaskDto;
 import com.soitio.taskmanager.tasks.domain.proj.SubTaskForScoringProj;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class SubTaskService {
         return subTaskRepository.findAllForScoringByStatusNot(Status.FINISHED);
     }
 
+    @Transactional
     public void updateSubTaskStatus(String id, Status newStatus) {
         var subTask = subTaskRepository.getReferenceById(id);
         subTask.setStatus(newStatus);

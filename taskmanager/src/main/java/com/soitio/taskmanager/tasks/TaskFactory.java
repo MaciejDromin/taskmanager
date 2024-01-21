@@ -3,10 +3,7 @@ package com.soitio.taskmanager.tasks;
 import com.soitio.taskmanager.goals.domain.Goal;
 import com.soitio.taskmanager.tasks.domain.Status;
 import com.soitio.taskmanager.tasks.domain.Task;
-import com.soitio.taskmanager.tasks.domain.dto.SimpleSubTaskUIDto;
-import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUIDto;
-import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
-import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
+import com.soitio.taskmanager.tasks.domain.dto.*;
 import com.soitio.taskmanager.tasks.domain.proj.SimpleSubTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.SimpleTaskProj;
 import org.springframework.stereotype.Component;
@@ -64,4 +61,12 @@ public class TaskFactory {
                 .build();
     }
 
+    public Task updateTask(Task taskToUpdate, TaskUpdateDto task, Goal goal) {
+        taskToUpdate.setName(task.getName());
+        taskToUpdate.setDescription(task.getDescription());
+        taskToUpdate.setPriority(task.getPriority());
+        taskToUpdate.setFinishDate(task.getFinishDate());
+        taskToUpdate.setGoal(goal);
+        return taskToUpdate;
+    }
 }

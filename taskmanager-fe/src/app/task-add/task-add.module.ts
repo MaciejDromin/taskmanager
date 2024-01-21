@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button'
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input'
 import { MatDatepickerModule}  from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
     MatDialogTitle,
     MatDialogContent,
@@ -25,6 +26,8 @@ import {
     MatDialogClose,
     MatDatepickerModule,
     MatSelectModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
     CommonModule
   ],
   exports: [
@@ -38,6 +41,8 @@ import {
     MatDialogClose,
     MatDatepickerModule,
     MatSelectModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
     CommonModule
   ],
   providers: [

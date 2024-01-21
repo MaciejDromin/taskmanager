@@ -29,8 +29,11 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field>
-        <mat-label>Search Goals</mat-label>
-        <input type="search" matInput [(ngModel)]="task.goalId" placeholder="Goals">
+        <mat-label>Goal</mat-label>
+        <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="task.goal">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option [value]="option" *ngFor="let option of (filteredOptions | async)">{{option.name}}</mat-option>
+        </mat-autocomplete>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Choose a Finish Date</mat-label>

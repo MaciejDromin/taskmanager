@@ -40,20 +40,22 @@ export class AppComponent {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(TaskAddComponent);
+    const dialogRef = this.dialog.open(TaskAddComponent, {
+      data: null
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === undefined) {
         return
       }
-      console.log(result)
-      // this.rxStompService.publish({ destination: '/app/tasks/add', body: JSON.stringify({
-      //   name: result.name,
-      //   finishDate: result.finishDate.set({ hour: 12 }).toUTC().toISO(),
-      //   goalId: result.goalId,
-      //   priority: result.priority,
-      //   description: result.description
-      // }) })
+      // console.log(typeof result.goal === 'object' ? result.goal.id : null)
+      this.rxStompService.publish({ destination: '/app/tasks/add', body: JSON.stringify({
+        name: result.name,
+        finishDate: result.finishDate.set({ hour: 12 }).toUTC().toISO(),
+        goalId: typeof result.goal === 'object' ? result.goal.id : null,
+        priority: result.priority,
+        description: result.description
+      }) })
     });
   }
 
@@ -67,6 +69,11 @@ export class AppComponent {
     {
       href: "/kanban",
       name: "Kanban",
+      isActive: false
+    },
+    {
+      href: "/tasks",
+      name: "Tasks",
       isActive: false
     }
   ]

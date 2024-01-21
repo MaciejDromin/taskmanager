@@ -133,7 +133,7 @@ export class KanbanComponent {
         event.previousIndex,
         event.currentIndex,
       );
-      this.rxStompService.publish({ destination: '/app/tasks/update', body: JSON.stringify({
+      this.rxStompService.publish({ destination: '/app/tasks/status/update', body: JSON.stringify({
         id: event.container.data[event.currentIndex].item.id,
         type: event.container.data[event.currentIndex].type,
         newStatus: newStatus

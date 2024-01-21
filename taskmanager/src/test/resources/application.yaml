@@ -1,0 +1,10 @@
+spring:
+  transaction:
+    default-timeout: 10s
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+scoring:
+  limit: 4

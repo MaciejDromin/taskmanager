@@ -3,11 +3,8 @@ package com.soitio.taskmanager.goals.web;
 import com.soitio.taskmanager.goals.application.GoalService;
 import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -25,6 +22,11 @@ public class GoalController {
     @PostMapping
     public GoalDto createGoal(@RequestBody GoalDto goalDto) {
         return goalService.createGoal(goalDto);
+    }
+
+    @GetMapping("/tasks/{taskId}")
+    public GoalDto getGoalByTaskId(@PathVariable String taskId) {
+        return goalService.getGoalByTaskId(taskId);
     }
 
 }

@@ -1,0 +1,84 @@
+<style>
+    .tasks-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .flex-right {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    .tasks-grid {
+        height: 100%;
+        width: 100%;
+    }
+    .task-tile {
+        padding: 16px;
+    }
+    .task-card {
+        min-width: 200px;
+        min-height: 200px;
+    }
+    h3 {
+        margin: 0px;
+        padding: 0px;
+    }
+    .desc {
+        min-height: 50px;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.8rem;
+        align-items: center;
+        justify-content: center;
+    }
+    .cl-red {
+        background-color: #D91E36;
+    }
+    .cl-yellow {
+        background-color: #E6AF2E;
+    }
+    .cl-orange {
+        background-color: #FA7921;
+    }
+    .cl-grey {
+        background-color: #888098;
+    }
+    .cl-green {
+        background-color: #BAF2BB;
+    }
+    .cl-blue {
+        background-color: #2B59C3;
+    }
+</style>
+<div id="tasks" class="tasks-container">
+    <div class="tasks-grid">
+        <mat-grid-list cols="5">
+            <mat-grid-tile class="task-tile" *ngFor="let task of (tasks$ | async)" [id]="[task.id]">
+                <mat-card class="task-card">
+                    <mat-card-header>
+                      <mat-card-title>{{task.name}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div>
+                            <h3>Description</h3>
+                            <p>{{task.description}}</p>
+                        </div>
+                        <div>
+                            <h3>Finish Date</h3>
+                            <p>{{task.finishDate}}</p>
+                        </div>
+                        <div class="desc">
+                            <button mat-mini-fab [ngClass]="[determinePriorityColor(task.priority)]">
+                                <mat-icon>{{determinePriorityIcon(task.priority)}}</mat-icon>
+                            </button>
+                            <mat-chip [ngClass]="[determineStatusColor(task.status)]">{{task.status}}</mat-chip>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button (click)="editTask(task)">EDIT</button>
+                      <button mat-button (click)="deleteTask(task.id)">DELETE</button>
+                    </mat-card-actions>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</div>
