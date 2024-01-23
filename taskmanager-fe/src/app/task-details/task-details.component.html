@@ -1,0 +1,84 @@
+<style>
+    .details-container {
+        max-width: 1024px;
+        padding: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .title-bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mr-128 {
+        margin-right: 128px;
+    }
+    .cl-red {
+        background-color: #D91E36;
+    }
+    .cl-yellow {
+        background-color: #E6AF2E;
+    }
+    .cl-orange {
+        background-color: #FA7921;
+    }
+    .cl-grey {
+        background-color: #888098;
+    }
+    .cl-green {
+        background-color: #BAF2BB;
+    }
+    .cl-blue {
+        background-color: #2B59C3;
+    }
+    .default-color {
+        background-color: grey;
+    }
+    .task {
+        border-style: solid;
+        border-width: 2px;
+        border-color: grey;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        min-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<div class="details-container">
+    <div class="title-bar">
+        <h2 style="margin: 0;">{{(task$ | async).name}}</h2>
+        <div style="display: flex; flex-direction: row;">
+            <div id="task-status-section" class="mr-128" style="display: flex; gap: 16px; align-items: center;">
+                <mat-chip [ngClass]="[determineStatusColor((task$ | async).status)]">{{(task$ | async).status}}</mat-chip>
+                <button mat-mini-fab [ngClass]="[determinePriorityColor((task$ | async).priority)]">
+                    <mat-icon>{{determinePriorityIcon((task$ | async).priority)}}</mat-icon>
+                </button>
+            </div>
+            <button mat-flat-button color="primary" [matMenuTriggerFor]="actions">More</button>
+            <mat-menu #actions="matMenu">
+                <button mat-menu-item *ngFor="let action of (actions$ | async)" (click)="executeAction(action)">{{action}}</button>
+            </mat-menu>
+        </div>
+    </div>
+    <hr style="margin-right: 0px;margin-left: 0px;" />
+    <p>{{(task$ | async).description}}</p>
+    <div>
+        Finish Date: {{(task$ | async).finishDate}}
+    </div>
+    <p *ngIf="(task$ | async).subTasks !== undefined" style="margin-top: 16px;">SubTasks</p>
+    <hr *ngIf="(task$ | async).subTasks !== undefined" style="margin-right: 0px;margin-left: 0px;" />
+    <div *ngFor="let subTask of (task$ | async).subTasks" class="task">
+        <p style="margin-top: auto; margin-bottom: auto;">{{subTask.name}}</p>
+        <button mat-mini-fab [ngClass]="[determinePriorityColor(subTask.priority)]">
+            <mat-icon>{{determinePriorityIcon(subTask.priority)}}</mat-icon>
+        </button>
+    </div>
+</div>

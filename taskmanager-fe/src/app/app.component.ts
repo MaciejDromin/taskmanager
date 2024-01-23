@@ -48,7 +48,6 @@ export class AppComponent {
       if (result === undefined) {
         return
       }
-      // console.log(typeof result.goal === 'object' ? result.goal.id : null)
       this.rxStompService.publish({ destination: '/app/tasks/add', body: JSON.stringify({
         name: result.name,
         finishDate: result.finishDate.set({ hour: 12 }).toUTC().toISO(),

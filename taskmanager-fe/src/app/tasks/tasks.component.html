@@ -48,15 +48,24 @@
     .cl-blue {
         background-color: #2B59C3;
     }
+    a {
+        color: white;
+        text-decoration: none;
+    }
+    a:checked {
+        color: white;
+    }
 </style>
 <div id="tasks" class="tasks-container">
     <div class="tasks-grid">
         <mat-grid-list cols="5">
             <mat-grid-tile class="task-tile" *ngFor="let task of (tasks$ | async)" [id]="[task.id]">
                 <mat-card class="task-card">
-                    <mat-card-header>
-                      <mat-card-title>{{task.name}}</mat-card-title>
-                    </mat-card-header>
+                    <a [routerLink]="[task.id]" >
+                        <mat-card-header>
+                            <mat-card-title>{{task.name}}</mat-card-title>
+                        </mat-card-header>
+                    </a>
                     <mat-card-content>
                         <div>
                             <h3>Description</h3>

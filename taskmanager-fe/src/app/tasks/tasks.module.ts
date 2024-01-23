@@ -5,6 +5,7 @@ import { MatGridListModule } from '@angular/material/grid-list'
 import { MatCardModule } from '@angular/material/card'
 import { MatChipsModule } from '@angular/material/chips'
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @NgModule ({
   imports: [
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
     MatGridListModule,
     MatCardModule,
     MatChipsModule,
+    RouterModule,
     CommonModule
   ],
   exports: [
@@ -21,6 +23,7 @@ import { CommonModule } from '@angular/common';
     MatGridListModule,
     MatCardModule,
     MatChipsModule,
+    RouterModule,
     CommonModule
   ]
 })

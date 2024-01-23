@@ -5,15 +5,18 @@ import com.soitio.taskmanager.tasks.TaskFactory;
 import com.soitio.taskmanager.tasks.application.port.TaskRepository;
 import com.soitio.taskmanager.tasks.domain.Status;
 import com.soitio.taskmanager.tasks.domain.Task;
+import com.soitio.taskmanager.tasks.domain.dto.DetailedTaskDto;
 import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUIDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskUpdateDto;
+import com.soitio.taskmanager.tasks.domain.proj.DetailedTaskProj;
+import com.soitio.taskmanager.tasks.domain.proj.SimpleTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.TaskForScoringProj;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +24,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
+
+    private final static List<String> FINISHED_ACTIONS = List.of("Edit", "Clone");
+    private final static List<String> DEFAULT_ACTIONS = List.of("Edit", "Clone", "Add SubTask");
 
     private final TaskRepository taskRepository;
     private final GoalService goalService;
@@ -48,7 +54,8 @@ public class TaskService {
 
     @Transactional
     public Set<SimpleTaskUIDto> findSimpleTasks(List<String> taskIds) {
-        return taskRepository.findAllProjByIdIn(taskIds).stream()
+        List<SimpleTaskProj> tasks = taskRepository.findAllProjByIdIn(taskIds, SimpleTaskProj.class);
+        return tasks.stream()
                 .map(taskFactory::simpleUITask)
                 .collect(Collectors.toSet());
     }
@@ -79,4 +86,21 @@ public class TaskService {
                         taskFactory.updateTask(taskToUpdate, task, task.getGoalId() == null
                                 ? null : goalService.getGoalById(task.getGoalId()))));
     }
+
+    @Transactional
+    public DetailedTaskDto getDetailedTask(String taskId) {
+        List<DetailedTaskProj> tasks = taskRepository.findAllProjByIdIn(List.of(taskId), DetailedTaskProj.class);
+        return tasks.stream()
+                .map(taskFactory::detailedTask)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Could not find task with id %s".formatted(tasks)));
+    }
+
+    public List<String> determineAvailableActions(String taskId) {
+        if (Status.FINISHED == taskRepository.getProjById(taskId).getStatus()) {
+            return FINISHED_ACTIONS;
+        }
+        return DEFAULT_ACTIONS;
+    }
+
 }

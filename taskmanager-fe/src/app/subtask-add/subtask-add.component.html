@@ -1,0 +1,47 @@
+<style>
+    .form-style {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .w-full {
+        width: 100%;
+    }
+    .task-add-container {
+        width: 400px;
+    }
+</style>
+<div mat-dialog-content class="task-add-container">
+  <p>What's the name for new SubTask?</p>
+  <div class="form-style">
+    <mat-form-field>
+        <mat-label>SubTask Name</mat-label>
+        <input matInput [(ngModel)]="subTask.name">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="subTask.description" placeholder="Task Description"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Priority</mat-label>
+        <mat-select [(value)]="subTask.priority">
+            <mat-option *ngFor="let option of priorities" [value]="option">{{option}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Task</mat-label>
+        <input matInput type="text" [value]="subTask.task.name" disabled>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Choose a Finish Date</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="subTask.finishDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Go Back</button>
+  <button mat-button [mat-dialog-close]="subTask" cdkFocusInitial>Ok</button>
+</div>
