@@ -8,19 +8,22 @@ import com.soitio.taskmanager.scoring.ScoringService;
 import com.soitio.taskmanager.scoring.TaskScore;
 import com.soitio.taskmanager.scoring.config.ScoringConfig;
 import com.soitio.taskmanager.scoring.domain.TaskType;
-import com.soitio.taskmanager.tasks.application.SubTaskService;
 import com.soitio.taskmanager.tasks.application.TaskService;
-import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUIDto;
+import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUiDto;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -43,17 +46,18 @@ public class DailyPlanService {
         if (dailyPlanOpt.isPresent()) {
             DailyPlan dailyPlan = dailyPlanOpt.get();
 
-            Set<SimpleTaskUIDto> simpleTasks = taskService.findSimpleTasks(dailyPlan.getDailyTaskIds());
-            Set<SimpleTaskUIDto> simpleTasksWithSubTasks = taskService.findSimpleTasksBySubTasksIds(dailyPlan.getDailySubTaskIds());
+            Set<SimpleTaskUiDto> simpleTasks = taskService.findSimpleTasks(dailyPlan.getDailyTaskIds());
+            Set<SimpleTaskUiDto> simpleTasksWithSubTasks = taskService.findSimpleTasksBySubTasksIds(dailyPlan.getDailySubTaskIds());
 
-            return dailyPlanFactory.from(dailyPlan, Stream.concat(simpleTasks.stream(), simpleTasksWithSubTasks.stream()).collect(Collectors.toSet()));
+            return dailyPlanFactory.from(dailyPlan, Stream.concat(simpleTasks.stream(),
+                    simpleTasksWithSubTasks.stream()).collect(Collectors.toSet()));
         }
 
         PriorityQueue<TaskScore> prioritizedTasks = scoringService.calculateTodayScores();
 
         List<TaskScore> taskScoreLimited = new ArrayList<>();
 
-        for (int i = 0;i < scoringConfig.limit();i++) {
+        for (int i = 0; i < scoringConfig.limit(); i++) {
             taskScoreLimited.add(prioritizedTasks.poll());
         }
 
@@ -67,8 +71,8 @@ public class DailyPlanService {
                 .map(TaskScore::taskId)
                 .toList();
 
-        Set<SimpleTaskUIDto> simpleTasks = taskService.findSimpleTasks(taskIds);
-        Set<SimpleTaskUIDto> simpleTasksWithSubTasks = taskService.findSimpleTasksBySubTasksIds(subTaskIds);
+        Set<SimpleTaskUiDto> simpleTasks = taskService.findSimpleTasks(taskIds);
+        Set<SimpleTaskUiDto> simpleTasksWithSubTasks = taskService.findSimpleTasksBySubTasksIds(subTaskIds);
 
         return dailyPlanFactory.from(dailyPlanRepository.save(DailyPlan.builder()
                 .effectiveDate(now)

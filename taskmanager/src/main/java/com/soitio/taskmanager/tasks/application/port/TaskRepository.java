@@ -5,10 +5,9 @@ import com.soitio.taskmanager.tasks.domain.Task;
 import com.soitio.taskmanager.tasks.domain.proj.SimpleTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.TaskForScoringProj;
 import com.soitio.taskmanager.tasks.domain.proj.TaskWithStatusProj;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, String> {

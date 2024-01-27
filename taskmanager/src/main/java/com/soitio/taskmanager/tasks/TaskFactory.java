@@ -3,13 +3,18 @@ package com.soitio.taskmanager.tasks;
 import com.soitio.taskmanager.goals.domain.Goal;
 import com.soitio.taskmanager.tasks.domain.Status;
 import com.soitio.taskmanager.tasks.domain.Task;
-import com.soitio.taskmanager.tasks.domain.dto.*;
+import com.soitio.taskmanager.tasks.domain.dto.DetailedTaskDto;
+import com.soitio.taskmanager.tasks.domain.dto.SimpleSubTaskUiDto;
+import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUiDto;
+import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
+import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
+import com.soitio.taskmanager.tasks.domain.dto.TaskUpdateDto;
 import com.soitio.taskmanager.tasks.domain.proj.DetailedTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.SimpleSubTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.SimpleTaskProj;
-import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TaskFactory {
@@ -55,8 +60,8 @@ public class TaskFactory {
                 .build();
     }
 
-    public SimpleTaskUIDto simpleUITask(SimpleTaskProj task) {
-        return SimpleTaskUIDto.builder()
+    public SimpleTaskUiDto simpleUiTask(SimpleTaskProj task) {
+        return SimpleTaskUiDto.builder()
                 .id(task.getId())
                 .name(task.getName())
                 .priority(task.getPriority())
@@ -67,22 +72,21 @@ public class TaskFactory {
                 .build();
     }
 
-    private SimpleSubTaskUIDto createSimpleSubTask(SimpleSubTaskProj subTaskProj) {
-        return SimpleSubTaskUIDto.builder()
-                .id(subTaskProj.getId())
-                .name(subTaskProj.getName())
-                .priority(subTaskProj.getPriority())
-                .status(subTaskProj.getStatus())
-                .build();
-    }
-
-    public Task updateTask(Task taskToUpdate, TaskUpdateDto task, Goal goal) {
+    public void updateTask(Task taskToUpdate, TaskUpdateDto task, Goal goal) {
         taskToUpdate.setName(task.getName());
         taskToUpdate.setDescription(task.getDescription());
         taskToUpdate.setPriority(task.getPriority());
         taskToUpdate.setFinishDate(task.getFinishDate());
         taskToUpdate.setGoal(goal);
-        return taskToUpdate;
+    }
+
+    private SimpleSubTaskUiDto createSimpleSubTask(SimpleSubTaskProj subTaskProj) {
+        return SimpleSubTaskUiDto.builder()
+                .id(subTaskProj.getId())
+                .name(subTaskProj.getName())
+                .priority(subTaskProj.getPriority())
+                .status(subTaskProj.getStatus())
+                .build();
     }
 
 }

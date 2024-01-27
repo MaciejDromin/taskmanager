@@ -2,11 +2,10 @@ package com.soitio.taskmanager.tasks.domain.dto;
 
 import com.soitio.taskmanager.tasks.domain.Priority;
 import com.soitio.taskmanager.tasks.domain.Status;
-import lombok.Builder;
-import lombok.Value;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.Value;
 
 @Value
 @Builder
@@ -18,6 +17,6 @@ public class DetailedTaskDto {
     Priority priority;
     Status status;
     LocalDateTime finishDate;
-    List<SimpleSubTaskUIDto> subTasks;
+    List<SimpleSubTaskUiDto> subTasks;
 
 }

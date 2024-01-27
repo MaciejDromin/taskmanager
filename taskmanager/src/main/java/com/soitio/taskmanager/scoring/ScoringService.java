@@ -7,8 +7,6 @@ import com.soitio.taskmanager.tasks.application.TaskService;
 import com.soitio.taskmanager.tasks.domain.Priority;
 import com.soitio.taskmanager.tasks.domain.proj.SubTaskForScoringProj;
 import com.soitio.taskmanager.tasks.domain.proj.TaskForScoringProj;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +56,7 @@ public class ScoringService {
         if (daysBetween > 1) {
             return 50L;
         }
+
         return 100L;
     }
 

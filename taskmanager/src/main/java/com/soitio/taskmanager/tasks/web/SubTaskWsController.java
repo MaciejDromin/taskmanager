@@ -20,4 +20,10 @@ public class SubTaskWsController {
         return subTaskService.createSubTask(message);
     }
 
+    @MessageMapping("/subtasks/update")
+    @SendTo("/taskmngr/subtasks/update")
+    public SubTaskDto updateSubTask(SubTaskDto subTaskDto) {
+        return subTaskService.updateSubTask(subTaskDto);
+    }
+
 }

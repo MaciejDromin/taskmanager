@@ -28,7 +28,7 @@
             <mat-option *ngFor="let option of priorities" [value]="option">{{option}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="subTask.task !== undefined">
         <mat-label>Task</mat-label>
         <input matInput type="text" [value]="subTask.task.name" disabled>
     </mat-form-field>

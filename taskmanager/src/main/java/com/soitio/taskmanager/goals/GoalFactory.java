@@ -5,25 +5,16 @@ import com.soitio.taskmanager.goals.domain.GoalProgressProjection;
 import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import com.soitio.taskmanager.goals.domain.dto.GoalWithProgressDto;
 import com.soitio.taskmanager.tasks.domain.Status;
-import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GoalFactory {
 
     public GoalDto from(Goal goal) {
         return GoalDto.builder()
-                .id(goal.getId())
-                .name(goal.getName())
-                .creationDate(goal.getCreationDate())
-                .finishDate(goal.getFinishDate())
-                .build();
-    }
-
-    public Goal to(GoalDto goal) {
-        return Goal.builder()
                 .id(goal.getId())
                 .name(goal.getName())
                 .creationDate(goal.getCreationDate())
@@ -39,10 +30,9 @@ public class GoalFactory {
                 .build();
     }
 
-    public Goal updateGoal(Goal goalToUpdate, GoalDto goal) {
+    public void updateGoal(Goal goalToUpdate, GoalDto goal) {
         goalToUpdate.setName(goal.getName());
         goalToUpdate.setFinishDate(goal.getFinishDate());
-        return goalToUpdate;
     }
 
     public GoalWithProgressDto createGoalWithProgress(GoalProgressProjection goalProgressProjection) {

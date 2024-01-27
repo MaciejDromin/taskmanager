@@ -1,11 +1,12 @@
 package com.soitio.taskmanager.tasks.domain.dto;
 
 import com.soitio.taskmanager.tasks.domain.Priority;
+import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Value;
 
-import java.time.LocalDateTime;
-
 @Value
+@Builder
 public class TaskUpdateDto {
 
     String id;

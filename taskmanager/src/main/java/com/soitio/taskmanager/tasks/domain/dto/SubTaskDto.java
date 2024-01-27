@@ -2,9 +2,9 @@ package com.soitio.taskmanager.tasks.domain.dto;
 
 import com.soitio.taskmanager.tasks.domain.Priority;
 import com.soitio.taskmanager.tasks.domain.Status;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
-import java.time.LocalDateTime;
 
 @Data
 @Builder

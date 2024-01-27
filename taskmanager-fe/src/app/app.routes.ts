@@ -30,5 +30,10 @@ export const routes: Routes = [
         path: 'tasks/:taskId',
         component: TaskDetailsComponent,
         title: 'Task Details'
+    },
+    {
+        path: 'subtasks/:subtaskId',
+        component: TaskDetailsComponent,
+        title: 'Task Details'
     }
 ];

@@ -10,13 +10,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableConfigurationProperties({
-		ScoringConfig.class
+    ScoringConfig.class
 })
 @EnableAutoConfiguration
 public class TaskmanagerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TaskmanagerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TaskmanagerApplication.class, args);
+    }
 
 }

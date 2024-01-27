@@ -6,12 +6,11 @@ import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskStatusUpdateDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskUpdateDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

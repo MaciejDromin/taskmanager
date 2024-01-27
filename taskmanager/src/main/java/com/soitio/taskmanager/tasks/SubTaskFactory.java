@@ -5,10 +5,9 @@ import com.soitio.taskmanager.tasks.domain.SubTask;
 import com.soitio.taskmanager.tasks.domain.Task;
 import com.soitio.taskmanager.tasks.domain.dto.SubTaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.SubTaskDto;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SubTaskFactory {
@@ -39,4 +38,12 @@ public class SubTaskFactory {
                 .status(Status.NOT_STARTED)
                 .build();
     }
+
+    public void updateSubTask(SubTask referenceById, SubTaskDto subTaskDto) {
+        referenceById.setName(subTaskDto.getName());
+        referenceById.setDescription(subTaskDto.getDescription());
+        referenceById.setPriority(subTaskDto.getPriority());
+        referenceById.setFinishDate(subTaskDto.getFinishDate());
+    }
+
 }

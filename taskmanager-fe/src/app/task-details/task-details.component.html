@@ -47,9 +47,18 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+    .task-container {
         min-width: 80%;
         margin-left: auto;
         margin-right: auto;
+    }
+    a {
+        color: white;
+        text-decoration: none;
+    }
+    a:checked {
+        color: white;
     }
 </style>
 <div class="details-container">
@@ -75,10 +84,12 @@
     </div>
     <p *ngIf="(task$ | async).subTasks !== undefined" style="margin-top: 16px;">SubTasks</p>
     <hr *ngIf="(task$ | async).subTasks !== undefined" style="margin-right: 0px;margin-left: 0px;" />
-    <div *ngFor="let subTask of (task$ | async).subTasks" class="task">
-        <p style="margin-top: auto; margin-bottom: auto;">{{subTask.name}}</p>
-        <button mat-mini-fab [ngClass]="[determinePriorityColor(subTask.priority)]">
-            <mat-icon>{{determinePriorityIcon(subTask.priority)}}</mat-icon>
-        </button>
+    <div *ngFor="let subTask of (task$ | async).subTasks" class="task-container">
+        <a [routerLink]="['/subtasks', subTask.id]" class="task">
+            <p style="margin-top: auto; margin-bottom: auto;">{{subTask.name}}</p>
+            <button mat-mini-fab [ngClass]="[determinePriorityColor(subTask.priority)]">
+                <mat-icon>{{determinePriorityIcon(subTask.priority)}}</mat-icon>
+            </button>
+        </a>
     </div>
 </div>

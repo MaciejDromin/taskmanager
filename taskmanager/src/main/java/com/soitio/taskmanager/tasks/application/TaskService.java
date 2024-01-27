@@ -6,7 +6,7 @@ import com.soitio.taskmanager.tasks.application.port.TaskRepository;
 import com.soitio.taskmanager.tasks.domain.Status;
 import com.soitio.taskmanager.tasks.domain.Task;
 import com.soitio.taskmanager.tasks.domain.dto.DetailedTaskDto;
-import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUIDto;
+import com.soitio.taskmanager.tasks.domain.dto.SimpleTaskUiDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskCreationDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskDto;
 import com.soitio.taskmanager.tasks.domain.dto.TaskUpdateDto;
@@ -15,18 +15,18 @@ import com.soitio.taskmanager.tasks.domain.proj.SimpleTaskProj;
 import com.soitio.taskmanager.tasks.domain.proj.TaskForScoringProj;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
-    private final static List<String> FINISHED_ACTIONS = List.of("Edit", "Clone");
-    private final static List<String> DEFAULT_ACTIONS = List.of("Edit", "Clone", "Add SubTask");
+    private static final List<String> FINISHED_ACTIONS = List.of("Edit", "Clone");
+    private static final List<String> DEFAULT_ACTIONS = List.of("Edit", "Clone", "Add SubTask");
 
     private final TaskRepository taskRepository;
     private final GoalService goalService;
@@ -53,17 +53,17 @@ public class TaskService {
     }
 
     @Transactional
-    public Set<SimpleTaskUIDto> findSimpleTasks(List<String> taskIds) {
+    public Set<SimpleTaskUiDto> findSimpleTasks(List<String> taskIds) {
         List<SimpleTaskProj> tasks = taskRepository.findAllProjByIdIn(taskIds, SimpleTaskProj.class);
         return tasks.stream()
-                .map(taskFactory::simpleUITask)
+                .map(taskFactory::simpleUiTask)
                 .collect(Collectors.toSet());
     }
 
     @Transactional
-    public Set<SimpleTaskUIDto> findSimpleTasksBySubTasksIds(List<String> subTaskIds) {
+    public Set<SimpleTaskUiDto> findSimpleTasksBySubTasksIds(List<String> subTaskIds) {
         return taskRepository.findAllBySubTasksIdIn(subTaskIds).stream()
-                .map(taskFactory::simpleUITask)
+                .map(taskFactory::simpleUiTask)
                 .collect(Collectors.toSet());
     }
 
@@ -81,10 +81,9 @@ public class TaskService {
     @Transactional
     public TaskDto updateTask(TaskUpdateDto task) {
         var taskToUpdate = taskRepository.getReferenceById(task.getId());
-        return taskFactory.from(
-                taskRepository.save(
-                        taskFactory.updateTask(taskToUpdate, task, task.getGoalId() == null
-                                ? null : goalService.getGoalById(task.getGoalId()))));
+        taskFactory.updateTask(taskToUpdate, task, task.getGoalId() == null
+                ? null : goalService.getGoalById(task.getGoalId()));
+        return taskFactory.from(taskRepository.save(taskToUpdate));
     }
 
     @Transactional

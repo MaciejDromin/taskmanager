@@ -47,6 +47,7 @@ enum Actions {
 export class TaskDetailsComponent implements OnInit {
 
   taskId = ''
+  taskType = ''
 
   task$ = this.state.select('task')
   actions$ = this.state.select('actions') 
@@ -56,7 +57,15 @@ export class TaskDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private rxStompService: RxStompService) {
-    this.taskId = this.route.snapshot.paramMap.get("taskId")!
+    let paramTaskId = this.route.snapshot.paramMap.get("taskId")!
+    if (paramTaskId === null) {
+      this.taskId = this.route.snapshot.paramMap.get("subtaskId")!
+      this.taskType = 'subtasks'
+    } else {
+      this.taskId = paramTaskId
+      this.taskType = 'tasks'
+    }
+    
     this.state.set({
       task: {
         name: null,
@@ -68,18 +77,21 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.httpClient.get(`http://localhost:8080/tasks/${this.taskId}`)
+
+    this.httpClient.get(`http://localhost:8080/${this.taskType}/${this.taskId}`)
       .subscribe(data => {
-        console.log(data)
         this.state.set('task', (oldState) => oldState.task = data as any)
       })
-    this.httpClient.get(`http://localhost:8080/tasks/${this.taskId}/actions`)
+
+    this.httpClient.get(`http://localhost:8080/${this.taskType}/${this.taskId}/actions`)
       .subscribe(data => this.state.set('actions', (oldState) => oldState.actions = [...data as any[]]))
-    this.rxStompService.watch('/taskmngr/subtasks/new').subscribe((goal: Message) => {
-      this.state.set('task', (oldState) => {
-        oldState.task.subTasks = [...oldState.task.subTasks, JSON.parse(goal.body)]
+    if (this.taskType === 'tasks') {
+      this.rxStompService.watch('/taskmngr/subtasks/new').subscribe((goal: Message) => {
+        this.state.set('task', (oldState) => {
+          oldState.task.subTasks = [...oldState.task.subTasks, JSON.parse(goal.body)]
+        })
       })
-    })
+    }
   }
 
   determinePriorityIcon(priority: string): string {
@@ -161,7 +173,39 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   editSubTask(task: any):void {
+    const dialogRef = this.dialog.open(SubTaskAddComponent, {
+      data: task
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === undefined) {
+        return
+      }
+      this.rxStompService.publish({ destination: '/app/subtasks/update', body: JSON.stringify({
+        id: result.id,
+        name: result.name,
+        finishDate: typeof result.finishDate === 'object' ? result.finishDate.set({ hour: 12 }).toUTC().toISO() : result.finishDate,
+        priority: result.priority,
+        description: result.description,
+      }) })
+
+      const updatetaskInState = (oldState: {task: any, actions: any[]}) => {
+        return {
+          task: {
+            id: result.id,
+            name: result.name,
+            finishDate: typeof result.finishDate === 'object' ? result.finishDate.set({ hour: 12 }).toUTC().toISO() : result.finishDate,
+            priority: result.priority,
+            description: result.description,
+            status: result.status
+          },
+          actions: oldState.actions
+        }
+      }
+  
+      this.state.set(updatetaskInState)
+
+    });
   }
 
   cloneTask(taskId: string):void {

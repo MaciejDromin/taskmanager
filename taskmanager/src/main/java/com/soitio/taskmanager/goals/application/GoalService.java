@@ -6,9 +6,9 @@ import com.soitio.taskmanager.goals.domain.Goal;
 import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import com.soitio.taskmanager.goals.domain.dto.GoalWithProgressDto;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +45,8 @@ public class GoalService {
     @Transactional
     public GoalDto updateGoal(GoalDto goal) {
         var goalToUpdate = goalRepository.getReferenceById(goal.getId());
-        return goalFactory.from(goalRepository.save(goalFactory.updateGoal(goalToUpdate, goal)));
+        goalFactory.updateGoal(goalToUpdate, goal);
+        return goalFactory.from(goalRepository.save(goalToUpdate));
     }
 
     public void deleteGoal(String goalId) {

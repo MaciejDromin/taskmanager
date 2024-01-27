@@ -3,11 +3,11 @@ package com.soitio.taskmanager.goals.web;
 import com.soitio.taskmanager.goals.application.GoalService;
 import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import com.soitio.taskmanager.goals.domain.dto.GoalWithProgressDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
