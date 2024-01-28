@@ -5,6 +5,7 @@ plugins {
 	id 'groovy'
 	id 'jacoco'
 	id 'checkstyle'
+	id 'org.liquibase.gradle' version '2.2.1'
 }
 
 group = 'com.soitio'
@@ -28,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation "org.liquibase:liquibase-core:${liquibase_version}"
 
 	// DB
 	runtimeOnly 'org.postgresql:postgresql'
@@ -36,15 +38,27 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// LIQUIBASE
+	liquibaseRuntime "org.liquibase:liquibase-core:${liquibase_version}"
+	liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibase_version}"
+	liquibaseRuntime "info.picocli:picocli:${picocli_version}"
+	liquibaseRuntime "org.postgresql:postgresql:${postgres_driver_version}"
+	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
+	liquibaseRuntime sourceSets.main.output
+
 	// TESTS
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
-	testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
-	implementation 'org.apache.groovy:groovy:4.0.18'
-	testImplementation "org.testcontainers:spock:1.19.3"
-	testImplementation "org.testcontainers:testcontainers:1.19.3"
-	testImplementation 'org.testcontainers:postgresql:1.19.3'
-	testImplementation 'org.testcontainers:toxiproxy:1.19.3'
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.spockframework:spock-spring:${spock_version}"
+	testImplementation "org.spockframework:spock-core:${spock_version}"
+
+	implementation "org.apache.groovy:groovy:${groovy_version}"
+
+	testImplementation "org.testcontainers:spock:${testcontainers_version}"
+	testImplementation "org.testcontainers:testcontainers:${testcontainers_version}"
+	testImplementation "org.testcontainers:postgresql:${testcontainers_version}"
+	testImplementation "org.testcontainers:toxiproxy:${testcontainers_version}"
+
+	testImplementation "org.liquibase:liquibase-core:${liquibase_version}"
 }
 
 tasks.named('test') {
@@ -85,3 +99,23 @@ check.dependsOn jacocoTestCoverageVerification
 
 test.finalizedBy jacocoTestReport
 test.finalizedBy jacocoTestCoverageVerification
+
+liquibase {
+	activities {
+		main {
+			changelogFile "./changelog.yml"
+			url "jdbc:postgresql://localhost:5432/taskmanager?useUnicode=yes&characterEncoding=UTF-8"
+			username "taskmanager"
+			password "taskmanager"
+			referenceUrl "hibernate:spring:com.soitio?dialect=org.hibernate.dialect.PostgreSQLDialect" +
+					"&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy" +
+					"&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+		}
+	}
+
+	diff.dependsOn compileJava
+	diffChangelog.dependsOn compileJava
+	generateChangelog.dependsOn compileJava
+}
+
+diffChangelog.dependsOn test

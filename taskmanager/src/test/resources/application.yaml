@@ -2,9 +2,11 @@ spring:
   transaction:
     default-timeout: 10s
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
 
 scoring:
   limit: 4

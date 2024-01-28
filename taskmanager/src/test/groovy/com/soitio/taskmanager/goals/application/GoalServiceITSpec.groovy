@@ -6,7 +6,6 @@ import com.soitio.taskmanager.goals.domain.dto.GoalDto
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Subject
-
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 

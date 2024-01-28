@@ -1,12 +1,14 @@
 spring:
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   datasource:
     url: jdbc:postgresql://localhost:5432/taskmanager?useUnicode=yes&characterEncoding=UTF-8
     username: taskmanager
     password: taskmanager
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
 
 scoring:
   limit: 4
