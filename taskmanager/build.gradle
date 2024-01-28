@@ -29,7 +29,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation "org.liquibase:liquibase-core:${liquibase_version}"
+
+	// METRICS
+	implementation "io.micrometer:micrometer-registry-prometheus:${micrometer_metrics_version}"
 
 	// DB
 	runtimeOnly 'org.postgresql:postgresql'

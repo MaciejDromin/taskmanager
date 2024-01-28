@@ -9,6 +9,28 @@ spring:
     password: taskmanager
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
+#  metrics:
+#    export:
+#      graphite:
+#        host: localhost
+#        port: 8008
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+    tags:
+      application: task-manager
+  endpoints:
+    web:
+      exposure:
+        include: [ "prometheus", "metrics" ]
 
 scoring:
   limit: 4

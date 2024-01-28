@@ -3,6 +3,8 @@ package com.soitio.taskmanager.goals.web;
 import com.soitio.taskmanager.goals.application.GoalService;
 import com.soitio.taskmanager.goals.domain.dto.GoalDto;
 import java.util.List;
+
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping
+    @Timed("endpoints.goals")
     public List<GoalDto> findAllGoals() {
         return goalService.findAllGoals();
     }
